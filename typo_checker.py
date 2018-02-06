@@ -95,15 +95,6 @@ def iterate_model(match_data):
         
 
 
-class LanguageTool(object):
-    
-    def __init__(self, model):
-        self.model  = model
-
-
-    @classmethod
-    def from_text(cls, text):
-        pass
 
 
 
