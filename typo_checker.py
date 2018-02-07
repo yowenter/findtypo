@@ -1,6 +1,7 @@
 # -*-encoding :utf-8 -*-
 
 import requests
+import os
 
 LANGUAGE_TOOL_API = "http://localhost:8081/v2/check"
 
@@ -96,6 +97,16 @@ def iterate_model(match_data):
 
 
 
+white_word_list = set()
+
+def load_white_word_list():
+    if not os.path.exists("white_word.list"):
+        print "White word list file not found"
+    with open("white_word.list","r") as f:
+        for line in f:
+            white_word_list.add(line.strip())
+
+
 
 
 
@@ -105,8 +116,9 @@ def find_typo_in_text(text):
     matched = result.get("matches")
     matches = [iterate_model(m) for m in matched]
     for m in matches:
-        if m.rule.issueType == "misspelling"  and m.context.text[m.context.offset:m.context.offset+m.context.length] not in typo_found:
+        word = m.context.text[m.context.offset:m.context.offset+m.context.length].lower()
+        if m.rule.issueType == "misspelling"  and word not in typo_found and word not in white_word_list:
             typo_found.append(m.context.text[m.context.offset:m.context.offset+m.context.length] )
-            yield "{} {}->{}".format(m.rule.issueType, m.context.text[m.context.offset:m.context.offset+m.context.length], m.replacements[:1])
+            yield "{}: {} -> {}".format(m.rule.issueType, m.context.text[m.context.offset:m.context.offset+m.context.length], m.replacements[:1])
 
 

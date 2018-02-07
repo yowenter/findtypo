@@ -21,7 +21,8 @@ def tokenize_file(fpath):
 
 
 def main():
-    directory = ""
+    directory = "/Users/wenter/dao-repos/commiter/autoscaler"
+    typo_checker.load_white_word_list()
     for root,_,flist in os.walk(directory):
         if len(_)>=1:
             continue
