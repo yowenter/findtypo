@@ -6,7 +6,7 @@ import typo_checker
 
 
 def tokenize(text):
-    return re.findall(r"([\w ]{20,100})",text)
+    return re.findall(r"([\w ]{20,})",text)
 
     
 
@@ -21,7 +21,7 @@ def tokenize_file(fpath):
 
 
 def main():
-    directory = "/Users/wenter/dao-repos/commiter/autoscaler"
+    directory = "/Users/wenter/private-repos/dashboard"
     typo_checker.load_white_word_list()
     for root,_,flist in os.walk(directory):
         if len(_)>=1:
