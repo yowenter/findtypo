@@ -118,7 +118,7 @@ def find_typo_in_text(text):
     for m in matches:
         word = m.context.text[m.context.offset:m.context.offset+m.context.length].lower()
         if m.rule.issueType == "misspelling"  and word not in typo_found and word not in white_word_list:
-            typo_found.append(m.context.text[m.context.offset:m.context.offset+m.context.length] )
-            yield "{}: {} -> {}".format(m.rule.issueType, m.context.text[m.context.offset:m.context.offset+m.context.length], m.replacements[:1])
+            typo_found.append(word )
+            yield "{}: {} -> {}".format(m.rule.issueType, word, m.replacements[:1])
 
 
