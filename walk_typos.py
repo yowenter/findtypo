@@ -6,7 +6,7 @@ import typo_checker
 
 
 def tokenize(text):
-    return re.findall(r"([\w ]{20,})",text)
+    return re.findall(r"([\w ]{30,})",text)
 
     
 
@@ -21,11 +21,10 @@ def tokenize_file(fpath):
 
 
 def main():
-    directory = "/Users/wenter/dao-repos/commiter/helm"
+    directory = "/Users/wenter/dao-repos/commiter/metrics"
     typo_checker.load_white_word_list()
     for root,_,flist in os.walk(directory):
-        if len(_)>=1:
-            continue
+        
         for f in flist:
             fpath = os.path.join(root,f)
             if "vendor" in fpath:
