@@ -122,3 +122,9 @@ def find_typo_in_text(text):
             yield "{}: {} -> {}".format(m.rule.issueType, word, m.replacements[:1])
 
 
+def find_all_possible_in_text(text):
+    result = check_text(text)
+    matched = result.get("matches")
+    matches = [iterate_model(m) for m in matched]
+    for m in matches:
+        yield "{}: {} -> {}".format(m.rule.issueType, m.context.text, m.replacements[:1])

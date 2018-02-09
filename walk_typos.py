@@ -21,20 +21,23 @@ def tokenize_file(fpath):
 
 
 def main():
-    directory = "/Users/wenter/private-repos/dashboard"
+    directory = "/Users/wenter/dao-repos/commiter/helm"
     typo_checker.load_white_word_list()
     for root,_,flist in os.walk(directory):
         if len(_)>=1:
             continue
         for f in flist:
             fpath = os.path.join(root,f)
+            if "vendor" in fpath:
+                continue
+
             tokens = tokenize_file(fpath)
             if not tokens:
                 continue
             print "#########"*10
             print fpath
             for token in tokens:
-                 m = typo_checker.find_typo_in_text(token)
+                 m = typo_checker.find_all_possible_in_text(token)
                  for _ in m:
                      print _
 
