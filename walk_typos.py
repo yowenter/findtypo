@@ -2,9 +2,11 @@
 
 import re
 import os
+import datetime
 import typo_checker
 import traceback
 
+regexp_f = re.compile(".*\.(md|go)")
 
 def tokenize(text):
     return re.findall(r"([\w ]{30,})",text)
@@ -13,8 +15,6 @@ def tokenize(text):
 
 
 def tokenize_file(fpath):
-    if not fpath.endswith("md"):
-        return 
     with open(fpath, 'r') as f:
         text = f.read()
         return tokenize(text)
@@ -28,6 +28,8 @@ class Pipe(object):
         self.buffer = []
         self.directory = directory
         self.fname = fname
+        with open(os.path.join(self.directory, self.fname),'w') as f:
+            f.write("{}".format(datetime.datetime.now()))
     
     def write(self,s):
         self.buffer.append(s)
@@ -37,7 +39,7 @@ class Pipe(object):
         self.buffer = []
     
     def save(self):
-        with open(os.path.join(self.directory, self.fname), "w") as f :
+        with open(os.path.join(self.directory, self.fname), "a") as f :
             for b in self.buffer:
                 f.write(b)
                 f.write("\n")
@@ -56,11 +58,13 @@ def main():
     for root,_,flist in os.walk(directory):
         
         for f in flist:
+            if not regexp_f.match(f):
+                continue
             i+=1
-            if i%100==0:
+            if i%30==0:
                     for p in pipes:
                         pipes[p].flush()
-                        
+
             fpath = os.path.join(root,f)
             if "vendor" in fpath:
                 continue
@@ -72,7 +76,6 @@ def main():
             print "Loading",fpath
             for token in tokens:
                 try:
-
                     matches = typo_checker.find_all_possible_in_text(token)
                 except Exception as e :
                     print traceback.format_exception()
